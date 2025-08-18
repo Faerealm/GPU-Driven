@@ -1,0 +1,192 @@
+#pragma kernel GrassCulling
+#pragma kernel TreeLeavesCulling
+
+uint grassCount;
+uint leavesCount;
+uint depthTextureSize;
+float3 cameraPosition;
+float4x4 vpMatrix;//相机的vp矩阵
+
+StructuredBuffer<float4x4> grassMatrixBuffer;
+AppendStructuredBuffer<float4x4> grassCullResultBuffer;//剔除后的矩阵
+StructuredBuffer<float4x4> treeLeavesMatrixBuffer;
+AppendStructuredBuffer<float4x4> leavesCullResultBuffer;
+
+Texture2D hizTexture;//hizmap纹理
+float3 boundMin;//包围盒最小点
+float3 boundMax;//包围盒最大点
+
+SamplerState sampler_hizTexture;//声明采样器状态
+
+//在裁剪空间下的视锥剔除操作
+bool IsInClipSpace(float4 clipSpacePosition)
+{
+    float buffer = 15.0f; 
+    
+    //#if  UNITY_VULKAN || UNITY_OPENGL_ES
+    //    return clipSpacePosition.x > -clipSpacePosition.w - buffer && 
+    //           clipSpacePosition.x < clipSpacePosition.w + buffer &&
+    //           clipSpacePosition.y > -clipSpacePosition.w - buffer && 
+    //           clipSpacePosition.y < clipSpacePosition.w + buffer &&
+    //           clipSpacePosition.z > -clipSpacePosition.w && 
+    //           clipSpacePosition.z < clipSpacePosition.w;
+    //#else
+        return clipSpacePosition.x > -clipSpacePosition.w - buffer && 
+               clipSpacePosition.x < clipSpacePosition.w + buffer &&
+               clipSpacePosition.y > -clipSpacePosition.w - buffer && 
+               clipSpacePosition.y < clipSpacePosition.w + buffer &&
+               clipSpacePosition.z > 0 && 
+               clipSpacePosition.z < clipSpacePosition.w;
+    //#endif
+       //DirectX: z > 0 && z < w OpenGL:z > -w && z < w
+}
+bool Lod(uint3 id,float4x4 originalMatrix)
+{
+    bool isLod=true;
+     //从矩阵中获取位置（矩阵第四列）
+    float3 worldPosition = float3(
+       originalMatrix._m03,
+       originalMatrix._m13,
+       originalMatrix._m23
+    );
+    //lod剔除
+    float cameraDistance = distance(worldPosition, cameraPosition);
+    if(cameraDistance>500.0f)
+    {
+         isLod = (id.x % 32 == 0);
+    }
+    else if(cameraDistance>400.0f)
+    {
+        isLod = (id.x % 20 == 0);
+    }
+    else if (cameraDistance >= 300.0f)
+    {
+        isLod = (id.x % 12 == 0);
+    }
+    else if (cameraDistance >= 200.0f)
+    {
+        isLod = (id.x % 6 == 0);
+    }
+    else if (cameraDistance >= 100.0f)
+    {
+        isLod = (id.x % 2 == 0);
+    }
+
+    return isLod;
+}
+
+bool IsCulling(uint3 id,float4x4 originalMatrix)
+{
+    //得到单个物体的mvp矩阵
+    float4x4 mvpMatrix = mul(vpMatrix, originalMatrix);
+
+    //NDC下的AABB各个参数
+    float minX = 1, minY = 1, minZ = 1, maxX = -1, maxY = -1, maxZ = 0;
+
+    //视锥剔除+HizMap遮挡剔除
+
+    bool isInClipSpace = false;
+    float4 clipSpace;
+    float3 ndc;
+    [unroll]//对于已知循环次数的小循环可以提升执行速度
+    for (int i = 0; i < 8; i++)
+    {
+         //包围盒的8个顶点的View Space坐标
+        float4 boundVert = (i == 0) ? float4(boundMin, 1) :
+                          (i == 1) ? float4(boundMax, 1) :
+                          (i == 2) ? float4(boundMax.x, boundMax.y, boundMin.z, 1) :
+                          (i == 3) ? float4(boundMax.x, boundMin.y, boundMax.z, 1) :
+                          (i == 4) ? float4(boundMax.x, boundMin.y, boundMin.z, 1) :
+                          (i == 5) ? float4(boundMin.x, boundMax.y, boundMax.z, 1) :
+                          (i == 6) ? float4(boundMin.x, boundMax.y, boundMin.z, 1) :
+                                    float4(boundMin.x, boundMin.y, boundMax.z, 1);
+        
+        clipSpace = mul(mvpMatrix, boundVert);
+        if (!isInClipSpace && IsInClipSpace(clipSpace))
+            isInClipSpace = true;
+        //计算该物体的ndc坐标
+        ndc = clipSpace.xyz / clipSpace.w;
+        if (minX > ndc.x)
+            minX = ndc.x;
+        if (minY > ndc.y)
+            minY = ndc.y;
+        if (minZ > ndc.z)
+            minZ = ndc.z;
+        if (maxX < ndc.x)
+            maxX = ndc.x;
+        if (maxY < ndc.y)
+            maxY = ndc.y;
+        if (maxZ < ndc.z)
+            maxZ = ndc.z;
+    }
+    if (!isInClipSpace)
+        return false;
+    //ndc的AABB的左下角和右上角的uv坐标，ndc的-1到1转换为uv的0到1
+    float2 uvLeftBottom = float2(minX, minY) * 0.5f + 0.5f;
+    float2 uvRightTop = float2(maxX, maxY) * 0.5f + 0.5f;
+    //ndc的z值即为深度
+    float depth = maxZ;
+    //选择mipmap层级
+    float screenSize = max(maxX - minX, maxY - minY) * depthTextureSize * 0.5f;
+    uint mipmapLevel = (uint) clamp(log2(depthTextureSize / screenSize), 0, log2(depthTextureSize) - 4);
+    //当前的mipmap的大小
+    uint size = depthTextureSize / (1 << mipmapLevel);
+    //左下角和右下角的点所在像素
+    uint2 pixelLeftBottom = uint2(clamp(uvLeftBottom.x * size, 0, size - 1), clamp(uvLeftBottom.y * size, 0, size - 1));
+    uint2 pixelRightTop = uint2(clamp(uvRightTop.x * size, 0, size - 1), clamp(uvRightTop.y * size, 0, size - 1));
+    
+    //一个像素点的情况
+    float depthInTexture = hizTexture.SampleLevel(sampler_hizTexture, float2(pixelLeftBottom) / size, mipmapLevel).r;
+
+    if (pixelLeftBottom.x < pixelRightTop.x && pixelLeftBottom.y < pixelRightTop.y)
+    {
+        //采样四个角点
+        float depth1 = hizTexture.SampleLevel(sampler_hizTexture,
+        float2(pixelRightTop) / size, mipmapLevel).r;
+        float depth2 = hizTexture.SampleLevel(sampler_hizTexture,
+        float2(pixelLeftBottom.x, pixelRightTop.y) / size, mipmapLevel).r;
+        float depth3 = hizTexture.SampleLevel(sampler_hizTexture,
+        float2(pixelRightTop.x, pixelLeftBottom.y) / size, mipmapLevel).r;
+    
+        depthInTexture = min(min(depthInTexture, depth1),
+                        min(depth2, depth3));
+    }
+    else if (pixelLeftBottom.x < pixelRightTop.x)
+    {
+        depthInTexture = min(depthInTexture,
+        hizTexture.SampleLevel(sampler_hizTexture,
+            float2(pixelRightTop.x, pixelLeftBottom.y) / size, mipmapLevel).r);
+    }
+    else if (pixelLeftBottom.y < pixelRightTop.y)
+    {
+        depthInTexture = min(depthInTexture,
+        hizTexture.SampleLevel(sampler_hizTexture,
+            float2(pixelLeftBottom.x, pixelRightTop.y) / size, mipmapLevel).r);
+    }
+    if (depthInTexture > depth)
+        return false;
+   return true;
+}
+[numthreads(1024, 1, 1)]
+void GrassCulling(uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= grassCount)
+        return;
+    float4x4 grassMatrix = grassMatrixBuffer[id.x];
+    if (Lod(id, grassMatrix) && IsCulling(id, grassMatrix))
+    {
+
+         grassCullResultBuffer.Append(grassMatrix);
+    }
+}
+[numthreads(1024, 1, 1)]
+void TreeLeavesCulling(uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= leavesCount)
+        return;
+    float4x4 leavesMatrix = treeLeavesMatrixBuffer[id.x];
+    if(IsCulling(id,leavesMatrix))
+    {
+        leavesCullResultBuffer.Append(leavesMatrix);
+    }
+}

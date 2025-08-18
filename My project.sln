@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{32C3BDE6-E125-3128-82C1-25D0441455A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{E8A91009-7186-A382-4FE4-3C21BA335F00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmplifyImpostors.Editor", "AmplifyImpostors.Editor.csproj", "{8ECAD8C2-1E06-CA83-469A-F9C39A437F48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JLChnToZ.EditorUtils.SkinnedMeshCombiner.Editor", "JLChnToZ.EditorUtils.SkinnedMeshCombiner.Editor.csproj", "{9FD3B70F-C29A-AFFE-7288-D04188D63E2B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmplifyImpostors.Runtime", "AmplifyImpostors.Runtime.csproj", "{96DEE549-CB59-C3CF-DBF3-BDDC22D9E88A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JLChnToZ.EditorUtils.SkinnedMeshCombiner.Runtime", "JLChnToZ.EditorUtils.SkinnedMeshCombiner.Runtime.csproj", "{E414DD5E-BB14-C7E0-1B39-B22CB50C1674}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmplifyImpostors", "AmplifyImpostors.csproj", "{28DE328C-D365-F56A-293E-F57101FF2DD7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{32C3BDE6-E125-3128-82C1-25D0441455A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32C3BDE6-E125-3128-82C1-25D0441455A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32C3BDE6-E125-3128-82C1-25D0441455A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32C3BDE6-E125-3128-82C1-25D0441455A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8A91009-7186-A382-4FE4-3C21BA335F00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8A91009-7186-A382-4FE4-3C21BA335F00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8A91009-7186-A382-4FE4-3C21BA335F00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8A91009-7186-A382-4FE4-3C21BA335F00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8ECAD8C2-1E06-CA83-469A-F9C39A437F48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8ECAD8C2-1E06-CA83-469A-F9C39A437F48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8ECAD8C2-1E06-CA83-469A-F9C39A437F48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8ECAD8C2-1E06-CA83-469A-F9C39A437F48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FD3B70F-C29A-AFFE-7288-D04188D63E2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FD3B70F-C29A-AFFE-7288-D04188D63E2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FD3B70F-C29A-AFFE-7288-D04188D63E2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FD3B70F-C29A-AFFE-7288-D04188D63E2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96DEE549-CB59-C3CF-DBF3-BDDC22D9E88A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96DEE549-CB59-C3CF-DBF3-BDDC22D9E88A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96DEE549-CB59-C3CF-DBF3-BDDC22D9E88A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96DEE549-CB59-C3CF-DBF3-BDDC22D9E88A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E414DD5E-BB14-C7E0-1B39-B22CB50C1674}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E414DD5E-BB14-C7E0-1B39-B22CB50C1674}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E414DD5E-BB14-C7E0-1B39-B22CB50C1674}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E414DD5E-BB14-C7E0-1B39-B22CB50C1674}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28DE328C-D365-F56A-293E-F57101FF2DD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28DE328C-D365-F56A-293E-F57101FF2DD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28DE328C-D365-F56A-293E-F57101FF2DD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28DE328C-D365-F56A-293E-F57101FF2DD7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

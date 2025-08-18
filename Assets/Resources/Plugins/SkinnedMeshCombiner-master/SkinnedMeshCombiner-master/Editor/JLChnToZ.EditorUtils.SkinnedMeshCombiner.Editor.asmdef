@@ -1,0 +1,17 @@
+{
+    "name": "JLChnToZ.EditorUtils.SkinnedMeshCombiner.Editor",
+    "references": [
+        "GUID:6e50840ef956230439f54d38dce3f954"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
