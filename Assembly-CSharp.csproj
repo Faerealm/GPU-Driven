@@ -10,7 +10,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{32C3BDE6-E125-3128-82C1-25D0441455A3}</ProjectGuid>
+    <ProjectGuid>{A0015675-23C6-C7D9-31AE-911BA3D9500B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -55,7 +55,7 @@
     <UnityVersion>2022.3.42f1c1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Analyzer Include="D:\ProgramFiles\VS\community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
+    <Analyzer Include="D:\ProgramFiles\VS\Enterprise\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
     <Analyzer Include="D:\unity\2022.3.42f1c1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="D:\unity\2022.3.42f1c1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
@@ -1144,23 +1144,23 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="AmplifyImpostors.Runtime.csproj">
-      <Project>{96DEE549-CB59-C3CF-DBF3-BDDC22D9E88A}</Project>
+      <Project>{69676269-286E-8778-8F56-72630DFFF14E}</Project>
       <Name>AmplifyImpostors.Runtime</Name>
     </ProjectReference>
     <ProjectReference Include="JLChnToZ.EditorUtils.SkinnedMeshCombiner.Editor.csproj">
-      <Project>{9FD3B70F-C29A-AFFE-7288-D04188D63E2B}</Project>
+      <Project>{E69D716B-AC83-FD00-6EB1-8DCC70FF4238}</Project>
       <Name>JLChnToZ.EditorUtils.SkinnedMeshCombiner.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="AmplifyImpostors.csproj">
-      <Project>{28DE328C-D365-F56A-293E-F57101FF2DD7}</Project>
+      <Project>{F5BCE0B6-0683-B073-D9F1-96B03B76B7AC}</Project>
       <Name>AmplifyImpostors</Name>
     </ProjectReference>
     <ProjectReference Include="JLChnToZ.EditorUtils.SkinnedMeshCombiner.Runtime.csproj">
-      <Project>{E414DD5E-BB14-C7E0-1B39-B22CB50C1674}</Project>
+      <Project>{0EA16E5C-99A4-DFC5-92A6-29FB978E07F1}</Project>
       <Name>JLChnToZ.EditorUtils.SkinnedMeshCombiner.Runtime</Name>
     </ProjectReference>
     <ProjectReference Include="AmplifyImpostors.Editor.csproj">
-      <Project>{8ECAD8C2-1E06-CA83-469A-F9C39A437F48}</Project>
+      <Project>{43F0050B-14D6-BE41-25E8-C5DBFE52D9A7}</Project>
       <Name>AmplifyImpostors.Editor</Name>
     </ProjectReference>
   </ItemGroup>
